@@ -1,249 +1,324 @@
-from dataclasses import dataclass
+from __future__ import annotations
 
-from .chunking import ResearchChunk
-from .retrieval import rank_chunks
-
-
-@dataclass
-class AnalysisDefinition:
-    label: str
-    queries: list[str]
-    why: str
-    threshold: float
-    preferred_sections: list[str]
+from .config import MAX_EVIDENCE_PER_CATEGORY
+from .retrieval import CATEGORY_CONFIG, EvidenceRetriever
 
 
-ANALYSIS_DEFINITIONS = [
-    AnalysisDefinition(
-        label="Research problem",
-        queries=[
-            "What research problem or research gap does this paper address?",
-            "What question or objective motivates this study?",
-            "What problem is the proposed research trying to solve?",
-        ],
-        why=(
-            "A clear research problem defines what the study "
-            "is trying to investigate or solve."
-        ),
-        threshold=0.31,
-        preferred_sections=[
-            "abstract",
-            "introduction",
-        ],
-    ),
-    AnalysisDefinition(
-        label="Dataset",
-        queries=[
-            "What dataset or data source was used in the study?",
-            "What corpus, participants, images, documents, "
-            "or experimental data were used?",
-            "How was the research data collected or selected?",
-        ],
-        why=(
-            "Dataset information helps explain what data was "
-            "used and whether the experiment can be reproduced."
-        ),
-        threshold=0.30,
-        preferred_sections=[
-            "dataset",
-            "method",
-            "training",
-        ],
-    ),
-    AnalysisDefinition(
-        label="Method / model",
-        queries=[
-            "What method, algorithm, model, or technical "
-            "approach does the paper propose?",
-            "How is the proposed system or research method constructed?",
-            "What architecture or methodology is used in the experiment?",
-        ],
-        why=(
-            "The method describes how the proposed system "
-            "or experiment was constructed."
-        ),
-        threshold=0.32,
-        preferred_sections=[
-            "method",
-            "introduction",
-        ],
-    ),
-    AnalysisDefinition(
-        label="Training",
-        queries=[
-            "How was the machine learning model trained?",
-            "What training procedure and configuration were used?",
-            "What optimizer, learning rate, epochs, batch size, "
-            "loss function, or training settings were used?",
-        ],
-        why=(
-            "Training details help explain how a machine-learning "
-            "model was learned and configured."
-        ),
-        threshold=0.32,
-        preferred_sections=[
-            "training",
-            "method",
-            "evaluation",
-        ],
-    ),
-    AnalysisDefinition(
-        label="Evaluation",
-        queries=[
-            "How was the proposed method evaluated?",
-            "What evaluation metrics or benchmarks were used?",
-            "How did the researchers measure performance or error?",
-        ],
-        why=(
-            "Evaluation criteria show how researchers measured "
-            "the performance of their approach."
-        ),
-        threshold=0.31,
-        preferred_sections=[
-            "evaluation",
-            "results",
-            "method",
-        ],
-    ),
-    AnalysisDefinition(
-        label="Results",
-        queries=[
-            "What experimental results and findings are reported?",
-            "What performance did the proposed method achieve?",
-            "What were the main outcomes of the experiments?",
-        ],
-        why=(
-            "Results provide the empirical evidence used "
-            "to support the findings of the study."
-        ),
-        threshold=0.31,
-        preferred_sections=[
-            "results",
-            "evaluation",
-            "discussion",
-        ],
-    ),
-    AnalysisDefinition(
-        label="Limitations / future work",
-        queries=[
-            "What limitations or weaknesses does the paper identify?",
-            "What unresolved problems remain after this study?",
-            "What future research directions or future work are proposed?",
-        ],
-        why=(
-            "Limitations and future work identify unresolved "
-            "problems and opportunities for further research."
-        ),
-        threshold=0.30,
-        preferred_sections=[
-            "limitations",
-            "discussion",
-            "conclusion",
-        ],
-    ),
-]
+CATEGORIES = list(CATEGORY_CONFIG.keys())
 
 
-def analyse(
-    chunks: list[ResearchChunk],
-    embeddings,
-    embedder,
-) -> list[dict]:
+def confidence_from_evidence(
+    evidence: list[dict],
+) -> str:
     """
-    Analyse the paper against several research-method categories.
+    Convert retrieval strength into a simple confidence label.
 
-    Each category uses multiple semantic questions. The strongest
-    retrieved passages are combined, then weak matches are removed.
+    This is a retrieval confidence indicator, not a claim that
+    the source itself is complete or reproducible.
     """
 
-    results = []
+    if not evidence:
+        return "none"
 
-    for definition in ANALYSIS_DEFINITIONS:
-        candidates = {}
+    best_score = max(
+        float(item.get("score", 0.0))
+        for item in evidence
+    )
 
-        for query in definition.queries:
-            query_embedding = embedder.encode(
-                query,
-                normalize_embeddings=True,
-            )
+    if best_score >= 0.75:
+        return "strong"
 
-            ranked = rank_chunks(
-                query_embedding,
-                chunks,
-                embeddings,
-                definition.preferred_sections,
-                top_k=5,
-            )
+    if best_score >= 0.50:
+        return "moderate"
 
-            for result in ranked:
-                chunk = result.chunk
+    return "weak"
 
-                evidence = {
-                    "page": chunk.page,
-                    "text": clean_text(chunk.text),
-                    "score": float(result.score),
-                    "section": chunk.section,
-                }
 
-                existing = candidates.get(
-                    chunk.id
-                )
+def classify_status(
+    evidence: list[dict],
+) -> str:
+    """
+    Classify a category based on the amount and strength of
+    retrieved evidence.
+    """
 
-                if (
-                    existing is None
-                    or evidence["score"]
-                    > existing["score"]
-                ):
-                    candidates[chunk.id] = evidence
+    if not evidence:
+        return "missing"
 
-        ordered = sorted(
-            candidates.values(),
+    best_score = max(
+        float(item.get("score", 0.0))
+        for item in evidence
+    )
+
+    if best_score >= 0.50:
+        return "found"
+
+    return "partial"
+
+
+def _evidence_to_dict(item) -> dict:
+    """
+    Convert RetrievedEvidence into a JSON-safe dictionary.
+    """
+
+    return {
+        "page": item.page,
+        "text": item.text,
+        "score": round(
+            float(item.score),
+            3,
+        ),
+        "section": item.section,
+        "semantic_score": round(
+            float(item.semantic_score),
+            3,
+        ),
+        "keyword_score": round(
+            float(item.keyword_score),
+            3,
+        ),
+    }
+
+
+def _is_scope_evidence(
+    item: dict,
+) -> bool:
+    """
+    Identify evidence that describes the chapter's scope,
+    purpose, coverage, or organisation.
+
+    Encyclopedia/reference chapters often do not contain an
+    explicit 'Research Aim' heading, so scope must also be
+    detected from introductory prose.
+    """
+
+    text = item["text"].lower()
+    section = (item.get("section") or "").lower()
+
+    if section not in {
+        "abstract",
+        "introduction",
+        "background",
+        "overview",
+        "scope",
+    }:
+        return False
+
+    scope_terms = [
+        "this chapter",
+        "this entry",
+        "this article",
+        "this contribution",
+        "the chapter",
+        "the article",
+        "the present chapter",
+        "the present article",
+        "we discuss",
+        "we examine",
+        "we review",
+        "we provide",
+        "focuses on",
+        "focuses upon",
+        "aims to",
+        "aims at",
+        "objective",
+        "purpose",
+        "overview",
+        "reviews the",
+        "reviews research",
+        "research on localization",
+        "localization research",
+    ]
+
+    return any(
+        term in text
+        for term in scope_terms
+    )
+
+
+def _retrieve_scope_evidence(
+    chunks: list[dict],
+    retriever: EvidenceRetriever,
+) -> list:
+    """
+    Retrieve scope evidence using both semantic retrieval
+    and explicit introductory-scope detection.
+    """
+
+    query = (
+        "chapter aim purpose scope overview "
+        "what this chapter discusses examines reviews "
+        "research on localization"
+    )
+
+    candidates = retriever.retrieve_question(
+        chunks,
+        query,
+        top_k=8,
+    )
+
+    candidate_dicts = [
+        _evidence_to_dict(item)
+        for item in candidates
+    ]
+
+    explicit = [
+        item
+        for item in candidate_dicts
+        if _is_scope_evidence(item)
+    ]
+
+    if explicit:
+        explicit.sort(
             key=lambda item: item["score"],
             reverse=True,
         )
 
-        strong_matches = [
-            item
-            for item in ordered
-            if item["score"] >= definition.threshold
+        return explicit[
+            :MAX_EVIDENCE_PER_CATEGORY
         ]
 
-        best = (
-            strong_matches[0]
-            if strong_matches
+    return candidates[
+        :MAX_EVIDENCE_PER_CATEGORY
+    ]
+
+
+def analyse(
+    chunks: list[dict],
+) -> dict:
+    """
+    Analyse a document by retrieving evidence for each
+    predefined research-analysis category.
+    """
+
+    retriever = EvidenceRetriever()
+
+    categories = []
+
+    for category in CATEGORIES:
+
+        if category == "Research Aim / Scope":
+            evidence_objects = _retrieve_scope_evidence(
+                chunks,
+                retriever,
+            )
+        else:
+            evidence_objects = retriever.retrieve_category(
+                chunks,
+                category,
+                top_k=MAX_EVIDENCE_PER_CATEGORY,
+            )
+
+        evidence = [
+            _evidence_to_dict(item)
+            for item in evidence_objects
+        ]
+
+        status = classify_status(
+            evidence,
+        )
+
+        confidence = confidence_from_evidence(
+            evidence,
+        )
+
+        primary = (
+            evidence[0]
+            if evidence
             else None
         )
 
-        if best:
-            confidence = (
-                "strong"
-                if best["score"]
-                >= definition.threshold + 0.10
-                else "moderate"
-            )
+        alternatives = (
+            evidence[1:]
+            if len(evidence) > 1
+            else []
+        )
 
-            status = "found"
-
-        else:
-            confidence = None
-            status = "missing"
-
-        results.append(
+        categories.append(
             {
-                "label": definition.label,
+                "category": category,
                 "status": status,
                 "confidence": confidence,
-                "evidence": best,
-                "alternatives": strong_matches[1:3],
-                "why": definition.why,
-                "queries": definition.queries,
+                "page": (
+                    primary["page"]
+                    if primary
+                    else None
+                ),
+                "section": (
+                    primary["section"]
+                    if primary
+                    else None
+                ),
+                "evidence": (
+                    primary["text"]
+                    if primary
+                    else None
+                ),
+                "score": (
+                    primary["score"]
+                    if primary
+                    else None
+                ),
+                "alternatives": alternatives,
             }
         )
 
-    return results
+    applicable_categories = len(
+        [
+            item
+            for item in categories
+            if item["status"] != "not_applicable"
+        ]
+    )
 
+    found = len(
+        [
+            item
+            for item in categories
+            if item["status"] == "found"
+        ]
+    )
 
-def clean_text(text: str) -> str:
-    return " ".join(
-        text.split()
-    ).strip()
+    partial = len(
+        [
+            item
+            for item in categories
+            if item["status"] == "partial"
+        ]
+    )
+
+    missing = len(
+        [
+            item
+            for item in categories
+            if item["status"] == "missing"
+        ]
+    )
+
+    evidence_coverage = round(
+        (
+            (found + (partial * 0.5))
+            / applicable_categories
+        )
+        * 100
+    ) if applicable_categories else 0
+
+    evidence_gaps = [
+        item["category"]
+        for item in categories
+        if item["status"] == "missing"
+    ]
+
+    return {
+        "categories": categories,
+        "summary": {
+            "total_categories": len(CATEGORIES),
+            "applicable_categories": applicable_categories,
+            "found": found,
+            "partial": partial,
+            "missing": missing,
+            "not_applicable": 0,
+            "evidence_coverage": evidence_coverage,
+        },
+        "evidence_gaps": evidence_gaps,
+    }

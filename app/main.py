@@ -1,185 +1,294 @@
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from __future__ import annotations
+
+from dataclasses import asdict
+
+import fitz
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from sentence_transformers import SentenceTransformer
 
 from .analysis import analyse
 from .chunking import create_chunks
-from .config import MAX_FILE_SIZE_MB, MODEL_NAME
-from .pdf_parser import extract_pdf_pages
-from .schemas import AnalysisResponse
+from .config import MAX_FILE_SIZE_MB
+from .generation import generate_answer
+from .retrieval import EvidenceRetriever
 
 
 app = FastAPI(
-    title="Research Evidence API",
-    version="0.1.0",
-    description=(
-        "API for extracting and retrieving "
-        "evidence from research papers."
-    ),
+    title="ResearchPaperRAG Evidence API",
+    version="0.5.0",
 )
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-_model = None
-
-
-def get_model():
-    """
-    Load the embedding model once and reuse it.
-
-    The first analysis takes longer because the model
-    needs to be downloaded and loaded locally.
-    """
-
-    global _model
-
-    if _model is None:
-        _model = SentenceTransformer(MODEL_NAME)
-
-    return _model
-
-
-@app.get("/health")
-def health():
-    return {
-        "status": "ok",
-        "service": "research-evidence-api",
-    }
-
-
-@app.post(
-    "/api/analyze",
-    response_model=AnalysisResponse,
-)
-async def analyze_paper(
-    file: UploadFile = File(...),
-):
-    if not file.filename:
+def extract_pages(
+    file_bytes: bytes,
+) -> list[dict]:
+    try:
+        document = fitz.open(
+            stream=file_bytes,
+            filetype="pdf",
+        )
+    except Exception as exc:
         raise HTTPException(
             status_code=400,
-            detail="Please provide a PDF file.",
+            detail=f"Could not read PDF: {exc}",
+        ) from exc
+
+    pages = []
+
+    for page_number, page in enumerate(
+        document,
+        start=1,
+    ):
+        text = page.get_text(
+            "text"
+        ).strip()
+
+        pages.append(
+            {
+                "page": page_number,
+                "text": text,
+            }
         )
 
-    if file.content_type != "application/pdf":
-        raise HTTPException(
-            status_code=400,
-            detail="Only PDF files are supported.",
-        )
+    document.close()
 
-    pdf_bytes = await file.read()
+    return pages
 
+
+def validate_pdf(
+    file_bytes: bytes,
+) -> None:
     max_bytes = (
         MAX_FILE_SIZE_MB
         * 1024
         * 1024
     )
 
-    if len(pdf_bytes) > max_bytes:
+    if len(file_bytes) > max_bytes:
         raise HTTPException(
             status_code=413,
             detail=(
-                f"PDF must be smaller than "
-                f"{MAX_FILE_SIZE_MB} MB."
+                f"PDF is larger than the "
+                f"{MAX_FILE_SIZE_MB} MB limit."
             ),
         )
 
-    try:
-        pages = extract_pdf_pages(
-            pdf_bytes
-        )
-
-    except Exception as exc:
+    if not file_bytes:
         raise HTTPException(
             status_code=400,
-            detail="The PDF could not be read.",
-        ) from exc
-
-    non_empty_pages = [
-        page
-        for page in pages
-        if page["text"].strip()
-    ]
-
-    if not non_empty_pages:
-        raise HTTPException(
-            status_code=422,
-            detail=(
-                "No selectable text was found. "
-                "Please use a text-based PDF rather "
-                "than a scanned image-only PDF."
-            ),
+            detail="The uploaded PDF is empty.",
         )
 
+
+def validate_question(
+    question: str,
+) -> str:
+    """
+    Validate and normalize a user question.
+
+    Swagger/OpenAPI uses 'string' as the default
+    placeholder for string form fields. Reject it
+    so it is never sent to the retrieval pipeline.
+    """
+
+    question = question.strip()
+
+    if not question:
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty.",
+        )
+
+    if question.lower() == "string":
+        raise HTTPException(
+            status_code=400,
+            detail="Please enter a real question.",
+        )
+
+    return question
+
+
+def create_document_chunks(
+    pages: list[dict],
+) -> list[dict]:
     chunks = create_chunks(
-        non_empty_pages
+        pages,
+        chunk_size=180,
+        overlap=40,
     )
 
-    if not chunks:
-        raise HTTPException(
-            status_code=422,
-            detail=(
-                "No usable text passages "
-                "were found in the PDF."
-            ),
-        )
-
-    model = get_model()
-
-    texts = [
-        chunk.text
+    return [
+        asdict(chunk)
         for chunk in chunks
     ]
 
-    embeddings = model.encode(
-        texts,
-        batch_size=16,
-        normalize_embeddings=True,
-        show_progress_bar=False,
-        convert_to_numpy=True,
+
+@app.get("/")
+def root() -> dict:
+    return {
+        "name": "ResearchPaperRAG Evidence API",
+        "version": "0.5.0",
+        "status": "running",
+    }
+
+
+@app.get("/health")
+def health() -> dict:
+    return {
+        "status": "ok",
+    }
+
+
+@app.post("/api/debug-pdf")
+async def debug_pdf(
+    file: UploadFile = File(...),
+) -> dict:
+    file_bytes = await file.read()
+
+    validate_pdf(file_bytes)
+
+    pages = extract_pages(
+        file_bytes
     )
 
-    results = analyse(
-        chunks,
-        embeddings,
-        model,
+    return {
+        "filename": file.filename,
+        "pages": len(pages),
+        "characters": sum(
+            len(page["text"])
+            for page in pages
+        ),
+        "preview": [
+            {
+                "page": page["page"],
+                "text": page["text"][:500],
+            }
+            for page in pages[:3]
+        ],
+    }
+
+
+@app.post("/api/analyze")
+async def analyze_pdf(
+    file: UploadFile = File(...),
+) -> dict:
+    file_bytes = await file.read()
+
+    validate_pdf(file_bytes)
+
+    pages = extract_pages(
+        file_bytes
     )
 
-    found_count = sum(
-        1
-        for item in results
-        if item["status"] == "found"
-    )
+    total_text = "".join(
+        page["text"]
+        for page in pages
+    ).strip()
 
-    evidence_coverage = round(
-        (
-            found_count
-            / len(results)
+    if not total_text:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "No readable text was found "
+                "in the PDF."
+            ),
         )
-        * 100
+
+    chunk_dicts = create_document_chunks(
+        pages
     )
 
-    evidence_gaps = [
-        item["label"]
-        for item in results
-        if item["status"] == "missing"
-    ]
-
-    return AnalysisResponse(
-        filename=file.filename,
-        pages=len(pages),
-        chunks=len(chunks),
-        evidence_coverage=evidence_coverage,
-        analysis=results,
-        evidence_gaps=evidence_gaps,
+    result = analyse(
+        chunk_dicts
     )
+
+    return {
+        "id": "analysis",
+        "filename": file.filename,
+        "pages": len(pages),
+        "chunks": len(chunk_dicts),
+        **result,
+    }
+
+
+@app.post("/api/ask")
+async def ask_question(
+    file: UploadFile = File(...),
+    question: str = Form(...),
+) -> dict:
+    # Validate the question before doing any
+    # PDF processing, embedding, or LLM inference.
+    question = validate_question(
+        question
+    )
+
+    file_bytes = await file.read()
+
+    validate_pdf(file_bytes)
+
+    pages = extract_pages(
+        file_bytes
+    )
+
+    total_text = "".join(
+        page["text"]
+        for page in pages
+    ).strip()
+
+    if not total_text:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "No readable text was found "
+                "in the PDF."
+            ),
+        )
+
+    chunk_dicts = create_document_chunks(
+        pages
+    )
+
+    retriever = EvidenceRetriever()
+
+    evidence = retriever.retrieve_question(
+        chunk_dicts,
+        question,
+        top_k=5,
+    )
+
+    if not evidence:
+        return {
+            "question": question,
+            "answer": (
+                "The provided evidence does not contain "
+                "enough information to answer this question."
+            ),
+            "evidence": [],
+        }
+
+    try:
+        generated = generate_answer(
+            question,
+            evidence,
+        )
+
+    except RuntimeError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "question": question,
+        "answer": generated.answer,
+        "evidence": generated.evidence,
+    }
