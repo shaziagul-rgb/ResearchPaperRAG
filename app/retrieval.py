@@ -23,18 +23,23 @@ CATEGORY_CONFIG = {
     "Research Aim / Scope": {
         "queries": [
             "research aim purpose objective scope",
-            "purpose of this chapter research focus",
-            "overview of localization research",
+            "aim and scope of this chapter",
+            "purpose and scope of the review",
+            "focus of this research",
+            "what this chapter examines",
+            "research objectives",
         ],
         "preferred_sections": [
+            "abstract",
             "introduction",
-            "research areas",
-            "research directions",
+            "research aim",
+            "scope",
         ],
         "excluded_sections": [
             "references",
             "bibliography",
             "figure",
+            "figure_caption",
             "caption",
         ],
         "keywords": [
@@ -43,290 +48,383 @@ CATEGORY_CONFIG = {
             "objective",
             "scope",
             "focus",
-            "research",
-            "chapter",
-            "overview",
+            "this chapter",
+            "this study",
+            "this research",
+            "this review",
+            "we review",
+            "we examine",
+            "we analyse",
+            "we analyze",
+            "focuses on",
+            "research on",
         ],
     },
+
     "Key Concepts / Definitions": {
         "queries": [
-            "definition of localization",
-            "what is localization",
-            "localization definition concept",
-            "meaning of localization",
+            "definition of key concepts",
+            "concepts and definitions",
+            "meaning and definition of important terms",
+            "term is defined as",
+            "conceptual definition",
+            "key terminology used in this study",
         ],
         "preferred_sections": [
             "definitions",
+            "background",
             "theoretical framework",
+            "introduction",
         ],
         "excluded_sections": [
             "references",
             "bibliography",
             "figure",
+            "figure_caption",
             "caption",
         ],
         "keywords": [
-            "definition",
             "defined",
-            "refers",
+            "definition",
+            "refers to",
+            "means",
             "concept",
-            "localization",
-            "locale",
+            "term",
+            "definition of",
+            "is defined",
         ],
     },
+
     "Theoretical Framework": {
         "queries": [
-            "theoretical framework localization",
-            "theories approaches localization",
-            "conceptualization of localization",
-            "translation theory localization",
+            "theoretical framework theory theoretical perspective",
+            "theoretical foundations",
+            "conceptual framework",
+            "theoretical model",
+            "theoretical approach",
+            "theoretical paradigm",
+            "epistemological framework",
         ],
         "preferred_sections": [
             "theoretical framework",
-            "theoretical approaches",
+            "theory",
+            "theoretical",
+            "background",
+            "introduction",
         ],
         "excluded_sections": [
             "references",
             "bibliography",
             "figure",
+            "figure_caption",
             "caption",
         ],
         "keywords": [
             "theoretical",
             "theory",
             "framework",
-            "approach",
             "conceptual",
-            "translation",
-            "modality",
+            "paradigm",
+            "model",
+            "perspective",
+            "epistemological",
+            "theoretical framework",
+            "theoretical approach",
         ],
     },
+
     "Research Areas / Themes": {
         "queries": [
-            "main research areas in localization research",
-            "research areas localization",
-            "research themes localization studies",
-            "areas of research in localization",
+            "research areas themes fields topics",
+            "areas of research",
+            "research themes",
+            "main research topics",
+            "subareas of research",
+            "areas of study discussed",
         ],
         "preferred_sections": [
             "research areas",
-            "research directions",
+            "related work",
+            "literature review",
+            "introduction",
         ],
         "excluded_sections": [
             "references",
             "bibliography",
             "figure",
+            "figure_caption",
             "caption",
         ],
         "keywords": [
-            "research",
-            "areas",
-            "themes",
-            "studies",
-            "approaches",
-            "empirical",
-            "experimental",
-            "cognitive",
-            "sociological",
-            "ethnographic",
+            "research area",
+            "research areas",
+            "research theme",
+            "research themes",
+            "field",
+            "fields",
+            "topic",
+            "topics",
+            "subarea",
+            "areas of research",
         ],
     },
+
     "Methods Discussed": {
         "queries": [
-            "research methods localization studies",
-            "methods used in localization research",
-            "methodology localization research",
-            "empirical methods localization",
+            "research methods methodology approaches",
+            "methods used in research",
+            "methodological approaches",
+            "research design procedures",
+            "experimental methods",
+            "methods and approaches discussed in previous studies",
+            "research methodologies used in previous studies",
         ],
         "preferred_sections": [
             "methods",
             "methodology",
+            "research methods",
+            "research design",
+            "experimental",
+            "approaches",
             "research areas",
-            "research directions",
         ],
         "excluded_sections": [
             "references",
             "bibliography",
             "figure",
+            "figure_caption",
             "caption",
         ],
         "keywords": [
             "method",
+            "methods",
             "methodology",
-            "empirical",
+            "methodological",
+            "approach",
+            "approaches",
+            "procedure",
+            "procedures",
+            "experiment",
             "experimental",
             "corpus",
-            "survey",
-            "study",
+            "corpus studies",
+            "dataset",
+            "data collection",
             "analysis",
-            "data",
+            "sample",
+            "participants",
+            "survey",
+            "interview",
+            "case study",
+            "empirical",
+            "comparative",
+            "contrastive",
         ],
     },
+
     "Evidence / Studies Reviewed": {
         "queries": [
-            "studies reviewed localization research",
-            "research evidence localization",
-            "empirical studies localization",
-            "previous research localization",
+            "evidence studies reviewed previous research",
+            "empirical evidence studies",
+            "previous studies and findings",
+            "research evidence literature",
+            "studies reviewed in the literature",
+            "findings from previous studies",
+            "evidence from previous research",
         ],
         "preferred_sections": [
+            "literature review",
+            "related work",
+            "evidence",
+            "studies",
+            "results",
             "research areas",
-            "research directions",
-            "theoretical framework",
         ],
         "excluded_sections": [
             "references",
             "bibliography",
             "figure",
+            "figure_caption",
             "caption",
         ],
         "keywords": [
             "study",
             "studies",
-            "research",
-            "empirical",
             "evidence",
             "findings",
             "results",
+            "research",
+            "investigation",
+            "empirical",
             "literature",
+            "previous studies",
+            "researchers found",
+            "found that",
+            "reported",
+            "demonstrated",
+            "observed",
         ],
     },
+
     "Conclusions / Research Directions": {
         "queries": [
-            "conclusions localization research",
-            "future research directions localization",
-            "research gaps localization",
-            "future of localization research",
+            "conclusions research directions future work",
+            "future research directions",
+            "conclusions implications",
+            "areas for future research",
+            "developing research approaches",
+            "future areas of research",
+            "research gaps and future directions",
+            "recommendations for further research",
         ],
         "preferred_sections": [
             "conclusion",
             "conclusions",
+            "future work",
             "research directions",
+            "discussion",
+            "developing approaches",
         ],
         "excluded_sections": [
             "references",
             "bibliography",
             "figure",
+            "figure_caption",
             "caption",
         ],
         "keywords": [
             "conclusion",
+            "conclusions",
             "future",
-            "directions",
-            "research",
+            "future research",
+            "research directions",
+            "implications",
+            "further research",
+            "future work",
+            "developing",
+            "emerging",
+            "areas for future",
+            "research gaps",
+            "gap",
             "gaps",
-            "challenges",
-            "opportunities",
         ],
     },
 }
 
 
 class EvidenceRetriever:
-    def __init__(
-        self,
-        model_name: str = MODEL_NAME,
-    ):
-        self.model = SentenceTransformer(
-            model_name
-        )
+    def __init__(self, model_name: str = MODEL_NAME):
+        self.model = SentenceTransformer(model_name)
 
-    def _encode(
-        self,
-        texts: list[str],
-    ) -> np.ndarray:
-        return self.model.encode(
+    # ---------------------------------------------------------
+    # Chunk helpers
+    # ---------------------------------------------------------
+
+    @staticmethod
+    def _get_chunk_value(chunk, key, default=None):
+        """
+        Support both ResearchChunk objects and dictionaries.
+
+        main.py currently passes dictionaries, while some tests may
+        pass ResearchChunk instances.
+        """
+        if isinstance(chunk, dict):
+            return chunk.get(key, default)
+
+        return getattr(chunk, key, default)
+
+    # ---------------------------------------------------------
+    # Embeddings
+    # ---------------------------------------------------------
+
+    def _encode(self, texts: list[str]) -> np.ndarray:
+        if not texts:
+            return np.empty((0, 384), dtype=np.float32)
+
+        embeddings = self.model.encode(
             texts,
+            convert_to_numpy=True,
             normalize_embeddings=True,
         )
 
-    @staticmethod
-    def _normalise_text(
-        text: str,
-    ) -> str:
-        return re.sub(
-            r"\s+",
-            " ",
-            text.lower(),
-        ).strip()
+        return embeddings
+
+    # ---------------------------------------------------------
+    # Keyword scoring
+    # ---------------------------------------------------------
 
     @staticmethod
-    def _tokenise(
-        text: str,
-    ) -> set[str]:
-        return set(
-            re.findall(
-                r"\b[a-zA-Z][a-zA-Z0-9-]{2,}\b",
-                text.lower(),
-            )
+    def _keyword_score(text: str, keywords: list[str]) -> float:
+        """
+        Estimate lexical relevance.
+
+        We deliberately do not require a large percentage of all
+        category keywords. A passage can be highly relevant while
+        naturally containing only a few category-specific terms.
+        """
+        text_lower = text.lower()
+
+        matches = 0
+
+        for keyword in keywords:
+            keyword_lower = keyword.lower().strip()
+
+            if not keyword_lower:
+                continue
+
+            if keyword_lower in text_lower:
+                matches += 1
+
+        # Four meaningful matches = full lexical score.
+        return min(matches / 4.0, 1.0)
+
+    # ---------------------------------------------------------
+    # Query overlap
+    # ---------------------------------------------------------
+
+    @staticmethod
+    def _query_overlap_score(text: str, query: str) -> float:
+        text_tokens = set(
+            re.findall(r"\b[a-zA-Z]{3,}\b", text.lower())
         )
 
-    def _keyword_score(
-        self,
-        text: str,
-        keywords: list[str],
-    ) -> float:
-        if not keywords:
-            return 0.0
-
-        normalised = self._normalise_text(
-            text
-        )
-
-        matches = sum(
-            1
-            for keyword in keywords
-            if keyword.lower() in normalised
-        )
-
-        return min(
-            matches / max(
-                len(keywords) * 0.25,
-                1,
-            ),
-            1.0,
-        )
-
-    def _query_overlap_score(
-        self,
-        query: str,
-        text: str,
-    ) -> float:
-        query_tokens = self._tokenise(
-            query
-        )
-
-        text_tokens = self._tokenise(
-            text
+        query_tokens = set(
+            re.findall(r"\b[a-zA-Z]{3,}\b", query.lower())
         )
 
         if not query_tokens:
             return 0.0
 
-        overlap = (
-            query_tokens
-            & text_tokens
+        overlap = len(text_tokens & query_tokens)
+
+        return min(
+            overlap / max(len(query_tokens), 1),
+            1.0,
         )
 
-        return (
-            len(overlap)
-            / len(query_tokens)
-        )
+    # ---------------------------------------------------------
+    # Section matching
+    # ---------------------------------------------------------
 
     @staticmethod
     def _section_matches(
         section: str | None,
-        names: list[str],
+        preferred_sections: list[str],
     ) -> bool:
         if not section:
             return False
 
-        section_lower = section.lower()
+        section_lower = section.lower().strip()
 
-        return any(
-            name.lower() in section_lower
-            for name in names
-        )
+        for preferred in preferred_sections:
+            if preferred.lower() in section_lower:
+                return True
+
+        return False
+
+    # ---------------------------------------------------------
+    # Excluded sections
+    # ---------------------------------------------------------
 
     @staticmethod
     def _is_excluded_section(
@@ -336,70 +434,90 @@ class EvidenceRetriever:
         if not section:
             return False
 
-        section_lower = section.lower()
+        section_lower = section.lower().strip()
 
-        return any(
-            excluded.lower() in section_lower
-            for excluded in excluded_sections
-        )
+        for excluded in excluded_sections:
+            if excluded.lower() in section_lower:
+                return True
+
+        return False
+
+    # ---------------------------------------------------------
+    # Reference-like text
+    # ---------------------------------------------------------
 
     @staticmethod
-    def _is_reference_like(
-        text: str,
-    ) -> bool:
-        text_lower = text.lower()
-
-        year_count = len(
-            re.findall(
-                r"\b(?:19|20)\d{2}\b",
-                text,
-            )
+    def _is_reference_like(text: str) -> bool:
+        """
+        Detect bibliography/reference-like text even if the section
+        detector failed to label it as references.
+        """
+        years = re.findall(
+            r"\b(?:19|20)\d{2}\b",
+            text,
         )
 
-        citation_patterns = len(
-            re.findall(
-                r"\b(?:doi|https?://|vol\.|pp?\.|"
-                r"journal|proceedings|publisher)\b",
-                text_lower,
-            )
+        citation_patterns = [
+            r"\bdoi\b",
+            r"https?://",
+            r"\bvol\.\b",
+            r"\bpp\.\b",
+            r"\bjournal\b",
+            r"\bproceedings\b",
+            r"\bpublisher\b",
+            r"\bpress\b",
+        ]
+
+        citation_matches = sum(
+            bool(re.search(pattern, text, re.I))
+            for pattern in citation_patterns
         )
 
-        return (
-            year_count >= 5
-            and citation_patterns >= 1
-        )
+        return len(years) >= 5 and citation_matches >= 1
 
-    def _question_keywords(
-        self,
-        question: str,
-    ) -> list[str]:
-        words = re.findall(
-            r"\b[a-zA-Z][a-zA-Z0-9-]{2,}\b",
-            question.lower(),
-        )
+    # ---------------------------------------------------------
+    # Question processing
+    # ---------------------------------------------------------
 
+    @staticmethod
+    def _question_keywords(question: str) -> list[str]:
         stopwords = {
             "what",
-            "are",
-            "the",
-            "main",
-            "how",
-            "does",
-            "why",
             "which",
             "where",
             "when",
+            "why",
+            "how",
+            "does",
+            "did",
+            "the",
             "this",
             "that",
-            "from",
+            "these",
+            "those",
+            "are",
+            "is",
+            "was",
+            "were",
+            "and",
+            "or",
+            "for",
             "with",
-            "about",
+            "from",
             "into",
-            "used",
-            "discussed",
-            "identified",
-            "defined",
+            "about",
+            "can",
+            "could",
+            "would",
+            "should",
+            "paper",
+            "chapter",
         }
+
+        words = re.findall(
+            r"\b[a-zA-Z]{3,}\b",
+            question.lower(),
+        )
 
         return [
             word
@@ -407,80 +525,81 @@ class EvidenceRetriever:
             if word not in stopwords
         ]
 
-    def _detect_question_intent(
-        self,
-        question: str,
-    ) -> str:
-        q = question.lower()
+    @staticmethod
+    def _detect_question_intent(question: str) -> str:
+        question_lower = question.lower()
 
         if any(
-            phrase in q
+            phrase in question_lower
             for phrase in [
                 "future research",
-                "future directions",
-                "research directions",
-                "research gaps",
-                "what future",
-                "identified for future",
-                "future of",
+                "future work",
+                "research direction",
+                "further research",
+                "what should be studied",
+                "what remains",
             ]
         ):
             return "future"
 
         if any(
-            word in q
-            for word in [
+            phrase in question_lower
+            for phrase in [
                 "method",
                 "methodology",
-                "methods",
+                "approach",
+                "how was",
+                "how were",
+                "research design",
+                "experiment",
             ]
         ):
             return "methods"
 
         if any(
-            phrase in q
+            phrase in question_lower
             for phrase in [
-                "theoretical approach",
-                "theoretical approaches",
-                "theoretical framework",
                 "theory",
-                "theories",
+                "theoretical",
+                "framework",
+                "paradigm",
+                "conceptual",
             ]
         ):
             return "theory"
 
         if any(
-            phrase in q
+            phrase in question_lower
             for phrase in [
-                "research areas",
                 "research area",
-                "research themes",
-                "main areas",
-                "areas discussed",
+                "research areas",
+                "themes",
+                "topics",
+                "fields",
             ]
         ):
             return "research_areas"
 
         if any(
-            phrase in q
+            phrase in question_lower
             for phrase in [
-                "what is",
-                "what are",
                 "define",
                 "definition",
-                "meaning of",
+                "what is",
+                "what does",
+                "meaning",
             ]
         ):
             return "definition"
 
         if any(
-            word in q
-            for word in [
-                "study",
-                "studies",
+            phrase in question_lower
+            for phrase in [
                 "evidence",
+                "studies",
                 "findings",
-                "research",
+                "results",
+                "researchers found",
             ]
         ):
             return "evidence"
@@ -491,138 +610,108 @@ class EvidenceRetriever:
     def _intent_multiplier(
         intent: str,
         section: str | None,
-        text: str,
     ) -> float:
-        section_lower = (
-            section.lower()
-            if section
-            else ""
-        )
+        if not section:
+            return 1.0
 
-        text_lower = text.lower()
+        section_lower = section.lower()
 
-        if intent == "definition":
-            if "definition" in section_lower:
-                return 1.45
+        if intent == "future":
+            if any(
+                term in section_lower
+                for term in [
+                    "future",
+                    "research directions",
+                    "conclusion",
+                    "discussion",
+                ]
+            ):
+                return 1.10
 
-            if "theoretical framework" in section_lower:
-                return 1.15
+        if intent == "methods":
+            if any(
+                term in section_lower
+                for term in [
+                    "method",
+                    "methodology",
+                    "research design",
+                    "experimental",
+                    "research areas",
+                ]
+            ):
+                return 1.10
 
-            return 0.90
+        if intent == "theory":
+            if any(
+                term in section_lower
+                for term in [
+                    "theoretical",
+                    "theory",
+                    "framework",
+                    "background",
+                ]
+            ):
+                return 1.10
 
         if intent == "research_areas":
             if "research areas" in section_lower:
-                return 1.45
+                return 1.10
 
-            if "research directions" in section_lower:
-                return 1.15
-
-            return 0.90
-
-        if intent == "theory":
-            if "theoretical framework" in section_lower:
-                return 1.45
-
-            if "theoretical approach" in section_lower:
-                return 1.35
-
-            return 0.90
-
-        if intent == "methods":
-            if (
-                "method" in section_lower
-                or "methodology" in section_lower
-            ):
-                return 1.45
-
-            method_terms = [
-                "method",
-                "methodology",
-                "empirical",
-                "experimental",
-                "corpus",
-                "survey",
-                "analysis",
-            ]
-
+        if intent == "definition":
             if any(
-                term in text_lower
-                for term in method_terms
+                term in section_lower
+                for term in [
+                    "definition",
+                    "definitions",
+                    "background",
+                ]
             ):
-                return 1.15
-
-            return 0.90
-
-        if intent == "future":
-            if "research directions" in section_lower:
-                return 1.65
-
-            if (
-                "conclusion" in section_lower
-                or "conclusions" in section_lower
-            ):
-                return 1.35
-
-            if "research areas" in section_lower:
-                return 0.65
-
-            return 0.80
+                return 1.10
 
         if intent == "evidence":
-            if (
-                "research areas" in section_lower
-                or "research directions" in section_lower
-                or "theoretical framework" in section_lower
+            if any(
+                term in section_lower
+                for term in [
+                    "evidence",
+                    "studies",
+                    "results",
+                    "literature review",
+                    "research areas",
+                ]
             ):
-                return 1.15
-
-            return 0.95
+                return 1.10
 
         return 1.0
 
+    # ---------------------------------------------------------
+    # Category retrieval
+    # ---------------------------------------------------------
+
     def retrieve_category(
         self,
-        chunks: list[dict],
+        chunks: list,
         category: str,
-        top_k: int = 5,
+        top_k: int = 3,
     ) -> list[RetrievedEvidence]:
 
-        config = CATEGORY_CONFIG[
-            category
-        ]
+        config = CATEGORY_CONFIG[category]
 
-        queries = config["queries"]
+        valid_chunks = []
 
-        texts = [
-            chunk["text"]
-            for chunk in chunks
-        ]
+        for chunk in chunks:
+            text = self._get_chunk_value(
+                chunk,
+                "text",
+                "",
+            )
 
-        if not texts:
-            return []
+            if not text or not text.strip():
+                continue
 
-        text_embeddings = self._encode(
-            texts
-        )
-
-        query_embeddings = self._encode(
-            queries
-        )
-
-        semantic_scores = np.max(
-            query_embeddings
-            @ text_embeddings.T,
-            axis=0,
-        )
-
-        scored = []
-
-        for index, chunk in enumerate(
-            chunks
-        ):
-            text = chunk["text"]
-            section = chunk.get(
-                "section"
+            section = self._get_chunk_value(
+                chunk,
+                "section",
+                None,
             )
 
             if self._is_excluded_section(
@@ -631,235 +720,404 @@ class EvidenceRetriever:
             ):
                 continue
 
-            if self._is_reference_like(
-                text
-            ):
+            if self._is_reference_like(text):
                 continue
 
-            keyword_score = (
-                self._keyword_score(
-                    text,
-                    config["keywords"],
-                )
+            valid_chunks.append(chunk)
+
+        if not valid_chunks:
+            return []
+
+        queries = config["queries"]
+
+        query_embeddings = self._encode(queries)
+
+        chunk_texts = [
+            self._get_chunk_value(
+                chunk,
+                "text",
+                "",
+            )
+            for chunk in valid_chunks
+        ]
+
+        chunk_embeddings = self._encode(
+            chunk_texts
+        )
+
+        candidates = []
+
+        for index, chunk in enumerate(valid_chunks):
+
+            text = self._get_chunk_value(
+                chunk,
+                "text",
+                "",
+            )
+
+            section = self._get_chunk_value(
+                chunk,
+                "section",
+                None,
+            )
+
+            page = self._get_chunk_value(
+                chunk,
+                "page",
+                None,
+            )
+
+            similarities = np.dot(
+                query_embeddings,
+                chunk_embeddings[index],
+            )
+
+            semantic_score = float(
+                np.max(similarities)
+            )
+
+            semantic_score = max(
+                0.0,
+                min(semantic_score, 1.0),
+            )
+
+            keyword_score = self._keyword_score(
+                text,
+                config["keywords"],
             )
 
             score = (
-                0.75
-                * float(
-                    semantic_scores[index]
-                )
-                + 0.25
-                * keyword_score
+                0.75 * semantic_score
+                + 0.25 * keyword_score
             )
 
+            # Small additive section bonus.
             if self._section_matches(
                 section,
                 config["preferred_sections"],
             ):
-                score *= 1.15
+                score += 0.05
 
-            scored.append(
+            score = max(
+                0.0,
+                min(score, 1.0),
+            )
+
+            candidates.append(
                 RetrievedEvidence(
-                    page=int(
-                        chunk["page"]
+                    page=(
+                        int(page)
+                        if page is not None
+                        else 0
                     ),
                     text=text,
-                    score=score,
+                    score=round(score, 3),
                     section=section,
-                    semantic_score=float(
-                        semantic_scores[index]
+                    semantic_score=round(
+                        semantic_score,
+                        3,
                     ),
-                    keyword_score=keyword_score,
+                    keyword_score=round(
+                        keyword_score,
+                        3,
+                    ),
                 )
             )
 
-        scored.sort(
+        # -----------------------------------------------------
+        # Do NOT filter candidates using MIN_EVIDENCE_SCORE here.
+        # We want analysis.py to see the strongest evidence even
+        # when its score is below the global threshold.
+        # -----------------------------------------------------
+
+        candidates.sort(
             key=lambda item: item.score,
             reverse=True,
         )
 
-        results = []
-        seen = set()
+        # -----------------------------------------------------
+        # Deduplicate highly similar text chunks.
+        # -----------------------------------------------------
 
-        for item in scored:
-            key = (
-                item.page,
-                self._normalise_text(
-                    item.text
-                )[:250],
+        selected = []
+
+        for candidate in candidates:
+
+            candidate_words = set(
+                candidate.text.lower().split()
             )
 
-            if key in seen:
+            duplicate = False
+
+            for existing in selected:
+
+                existing_words = set(
+                    existing.text.lower().split()
+                )
+
+                if not candidate_words or not existing_words:
+                    continue
+
+                overlap = (
+                    len(
+                        candidate_words
+                        & existing_words
+                    )
+                    / len(
+                        candidate_words
+                        | existing_words
+                    )
+                )
+
+                if overlap > 0.70:
+                    duplicate = True
+                    break
+
+            if duplicate:
                 continue
 
-            seen.add(key)
+            selected.append(candidate)
 
-            if (
-                item.score
-                >= MIN_EVIDENCE_SCORE
-            ):
-                results.append(item)
-
-            if len(results) >= top_k:
+            if len(selected) >= top_k:
                 break
 
-        return results
+        return selected
+
+    # ---------------------------------------------------------
+    # Question retrieval
+    # ---------------------------------------------------------
 
     def retrieve_question(
         self,
-        chunks: list[dict],
+        chunks: list,
         question: str,
         top_k: int = 5,
     ) -> list[RetrievedEvidence]:
 
-        texts = [
-            chunk["text"]
-            for chunk in chunks
-        ]
-
-        if not texts:
+        if not question.strip():
             return []
 
-        text_embeddings = self._encode(
-            texts
-        )
+        valid_chunks = []
+
+        for chunk in chunks:
+
+            text = self._get_chunk_value(
+                chunk,
+                "text",
+                "",
+            )
+
+            if not text or not text.strip():
+                continue
+
+            section = self._get_chunk_value(
+                chunk,
+                "section",
+                None,
+            )
+
+            if self._is_excluded_section(
+                section,
+                [
+                    "references",
+                    "bibliography",
+                    "figure",
+                    "figure_caption",
+                    "caption",
+                ],
+            ):
+                continue
+
+            if self._is_reference_like(text):
+                continue
+
+            valid_chunks.append(chunk)
+
+        if not valid_chunks:
+            return []
 
         question_embedding = self._encode(
             [question]
         )[0]
 
-        semantic_scores = (
-            text_embeddings
-            @ question_embedding
+        chunk_texts = [
+            self._get_chunk_value(
+                chunk,
+                "text",
+                "",
+            )
+            for chunk in valid_chunks
+        ]
+
+        chunk_embeddings = self._encode(
+            chunk_texts
         )
 
-        question_keywords = (
-            self._question_keywords(
-                question
-            )
+        question_keywords = self._question_keywords(
+            question
         )
 
-        intent = (
-            self._detect_question_intent(
-                question
-            )
+        intent = self._detect_question_intent(
+            question
         )
 
-        scored = []
+        candidates = []
 
-        for index, chunk in enumerate(
-            chunks
-        ):
-            text = chunk["text"]
-            section = chunk.get(
-                "section"
+        for index, chunk in enumerate(valid_chunks):
+
+            text = self._get_chunk_value(
+                chunk,
+                "text",
+                "",
             )
 
-            excluded_sections = {
-                "references",
-                "bibliography",
-                "figure",
-                "caption",
-            }
-
-            section_lower = (
-                section.lower()
-                if section
-                else ""
+            section = self._get_chunk_value(
+                chunk,
+                "section",
+                None,
             )
 
-            if any(
-                excluded in section_lower
-                for excluded in excluded_sections
-            ):
-                continue
+            page = self._get_chunk_value(
+                chunk,
+                "page",
+                None,
+            )
 
-            if self._is_reference_like(
-                text
-            ):
-                continue
-
-            keyword_score = (
-                self._keyword_score(
-                    text,
-                    question_keywords,
+            semantic_score = float(
+                np.dot(
+                    question_embedding,
+                    chunk_embeddings[index],
                 )
             )
 
-            query_overlap = (
-                self._query_overlap_score(
-                    question,
-                    text,
-                )
+            semantic_score = max(
+                0.0,
+                min(semantic_score, 1.0),
             )
 
-            base_score = (
-                0.70
-                * float(
-                    semantic_scores[index]
-                )
-                + 0.20
-                * keyword_score
-                + 0.10
-                * query_overlap
-            )
+            keyword_score = 0.0
 
-            multiplier = (
-                self._intent_multiplier(
-                    intent,
-                    section,
-                    text,
+            if question_keywords:
+
+                text_lower = text.lower()
+
+                matches = sum(
+                    1
+                    for keyword in question_keywords
+                    if keyword in text_lower
                 )
+
+                keyword_score = min(
+                    matches / 4.0,
+                    1.0,
+                )
+
+            overlap_score = self._query_overlap_score(
+                text,
+                question,
             )
 
             score = (
-                base_score
-                * multiplier
+                0.70 * semantic_score
+                + 0.20 * keyword_score
+                + 0.10 * overlap_score
             )
 
-            scored.append(
+            score *= self._intent_multiplier(
+                intent,
+                section,
+            )
+
+            score = max(
+                0.0,
+                min(score, 1.0),
+            )
+
+            candidates.append(
                 RetrievedEvidence(
-                    page=int(
-                        chunk["page"]
+                    page=(
+                        int(page)
+                        if page is not None
+                        else 0
                     ),
                     text=text,
-                    score=score,
+                    score=round(score, 3),
                     section=section,
-                    semantic_score=float(
-                        semantic_scores[index]
+                    semantic_score=round(
+                        semantic_score,
+                        3,
                     ),
-                    keyword_score=keyword_score,
+                    keyword_score=round(
+                        keyword_score,
+                        3,
+                    ),
                 )
             )
 
-        scored.sort(
+        candidates.sort(
             key=lambda item: item.score,
             reverse=True,
         )
 
-        results = []
-        seen = set()
+        # -----------------------------------------------------
+        # Apply the minimum evidence score threshold here.
+        #
+        # Unlike retrieve_category (used by /api/analyze, which
+        # wants to see the best available evidence even when it is
+        # weak, so it can report partial/missing coverage),
+        # retrieve_question feeds evidence straight to the LLM for
+        # /api/ask. If nothing clears the bar, the caller should
+        # get an empty list back and return an "insufficient
+        # evidence" response instead of asking the model to answer
+        # from irrelevant passages.
+        # -----------------------------------------------------
 
-        for item in scored:
-            key = (
-                item.page,
-                self._normalise_text(
-                    item.text
-                )[:300],
+        candidates = [
+            candidate
+            for candidate in candidates
+            if candidate.score >= MIN_EVIDENCE_SCORE
+        ]
+
+        selected = []
+
+        for candidate in candidates:
+
+            candidate_words = set(
+                candidate.text.lower().split()
             )
 
-            if key in seen:
+            duplicate = False
+
+            for existing in selected:
+
+                existing_words = set(
+                    existing.text.lower().split()
+                )
+
+                if not candidate_words or not existing_words:
+                    continue
+
+                overlap = (
+                    len(
+                        candidate_words
+                        & existing_words
+                    )
+                    / len(
+                        candidate_words
+                        | existing_words
+                    )
+                )
+
+                if overlap > 0.70:
+                    duplicate = True
+                    break
+
+            if duplicate:
                 continue
 
-            seen.add(key)
+            selected.append(candidate)
 
-            if (
-                item.score
-                >= MIN_EVIDENCE_SCORE
-            ):
-                results.append(item)
-
-            if len(results) >= top_k:
+            if len(selected) >= top_k:
                 break
 
-        return results
+        return selected

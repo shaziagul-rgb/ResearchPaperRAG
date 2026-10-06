@@ -68,8 +68,6 @@ GROUNDING RULES:
 
 METHOD HANDLING:
 
-METHOD HANDLING:
-
 9. When the question asks about research methods, distinguish
    methodological approaches from the topics or subjects being studied.
 
@@ -78,8 +76,8 @@ METHOD HANDLING:
     case studies, error analysis, sociological or ethnographic approaches,
     and social network analysis only when supported by the evidence.
 
-11. Do not describe research topics, application areas, training areas,
-    digital genres, localization components, or quality issues as methods.
+11. Do not describe research topics, application areas, or subject-matter
+    themes as methods.
 
 12. When the evidence contains both research areas and methods,
     prioritize the methodological information when answering a methods
@@ -91,38 +89,34 @@ METHOD HANDLING:
 
 ANSWER STYLE:
 
-11. Answer the user's question directly.
-12. Keep the answer concise.
-13. For a simple "What is...", "What does X mean?", or "Define X"
+14. Answer the user's question directly.
+15. Keep the answer concise.
+16. For a simple "What is...", "What does X mean?", or "Define X"
     question, answer in ONLY 2–3 sentences.
-14. For a definition question, give the core definition first.
-15. Include only the most important characteristics needed to explain
+17. For a definition question, give the core definition first.
+18. Include only the most important characteristics needed to explain
     the concept.
-16. Do not list every example, application, genre, historical detail,
+19. Do not list every example, application, genre, historical detail,
     or secondary point from the evidence.
-17. Do not repeat the question.
-18. Do not write a long paragraph when a short explanation is enough.
-19. When the question asks for research methods, report methods or
+20. Do not repeat the question.
+21. Do not write a long paragraph when a short explanation is enough.
+22. When the question asks for research methods, report methods or
     methodological approaches rather than simply listing research
     topics or areas.
-20. When the evidence describes several methodological approaches,
+23. When the evidence describes several methodological approaches,
     group them clearly instead of repeating similar descriptions.
 
 CITATION RULES:
 
-21. Do not reproduce academic citations from the source.
-22. Never write citations such as:
-    (Pym 2004)
-    (Jiménez-Crespo 2016)
-    (Microsoft 1994)
-    (LISA 2003)
-    (Pym 2011: 414)
-
-23. Do not include author names or publication years unless the user
+24. Do not reproduce academic citations from the source.
+25. Never invent or write parenthetical author-year citations
+    (e.g. "(Smith 2019)") even if similar citations appear in the
+    evidence.
+26. Do not include author names or publication years unless the user
     specifically asks about them.
-24. Page citations will be added automatically by the application.
-25. Therefore, DO NOT write any page citations yourself.
-26. Do not write [p. 3], [p. 4], or similar citations in your answer.
+27. Page citations will be added automatically by the application.
+28. Therefore, DO NOT write any page citations yourself.
+29. Do not write [p. 3], [p. 4], or similar citations in your answer.
 
 INSUFFICIENT EVIDENCE:
 
@@ -159,16 +153,19 @@ def _clean_answer(
         answer,
     )
 
-    # Remove common author/year citations without parentheses.
+    # Remove author/year citations written without parentheses, e.g.
+    # "Smith 2019", "Smith & Jones 2019", "Smith et al. 2019: 41".
+    # This is domain-agnostic: it matches on capitalisation and a
+    # trailing year rather than a fixed list of author names, so it
+    # generalises across papers instead of only recognising authors
+    # from one field.
     answer = re.sub(
-        r"\b(?:Microsoft|Pym|LISA|GALA|"
-        r"Jiménez-Crespo|Esselink|Dunne|Mazur|"
-        r"O'Hagan|Mangiron|Mayoral|Hurtado)"
-        r"(?:\s+(?:&|and)\s+[\w'’-]+)?"
-        r"\s+\d{4}(?::\s*\d+)?",
+        r"\b[A-Z][\w'’\-]+"
+        r"(?:\s+et\s+al\.?"
+        r"|\s+(?:&|and)\s+[A-Z][\w'’\-]+)?"
+        r"\s+(?:19|20)\d{2}(?::\s*\d+)?\b",
         "",
         answer,
-        flags=re.IGNORECASE,
     )
 
     # Remove "cit. in" fragments.

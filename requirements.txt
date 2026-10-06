@@ -1,5 +1,8 @@
 fastapi
 uvicorn[standard]
+python-multipart
 pymupdf
 sentence-transformers
 numpy
+httpx
+pypdf
